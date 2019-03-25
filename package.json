@@ -1,0 +1,27 @@
+{
+  "name": "cruddemo",
+  "version": "1.0.0",
+  "description": "a crud app using vue js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avsssai/vue-CRUD.git"
+  },
+  "author": "shiva seshasai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avsssai/vue-CRUD/issues"
+  },
+  "homepage": "https://github.com/avsssai/vue-CRUD#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.19"
+  }
+}
