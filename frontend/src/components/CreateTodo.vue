@@ -7,20 +7,37 @@
           <h1 class='text-center'>TODO LIST</h1>
           <form v-on:submit='createTodo()'>
             <input type="text" class='form-control' placeholder='Enter the task..' v-model='taskname'>
-            <button class='btn-success btn-block mt-3' type='submit'>Add Task</button>
+            <button class='btn-success btn-block mt-3'  type='submit'>Add Task</button>
+            <!-- <button class='btn-primary btn-block mt-3' v-if="this.isEditing==true" @click="updateTask()">Update Task</button> -->
         </form>
         <table class='table'>
           
-          <tr v-for='todo in todos' v-bind:key='todo.id' v-bind:title='todo.title'>
-            <td class='text-left'>{{todo.title}}</td>
-            <td class='text-right'>
-              <button @click='editTodo(todo._id,todo.title)' class="btn btn-primary mr-3">
+          <tr v-for='todo in todos' v-bind:key='todo.id' v-bind:title='todo.title' >
+            <td class='text-left'  >
+                <div v-show="isEditing===false" @dblclick="showEditingForm()" v-on:blur="isEditing=false" >{{todo.title}}
+                </div>
+                <div v-show="isEditing===true" >
+                    <input type="text" v-bind:id='todo.id' v-model="todo.title">
+                </div>
+
+            </td>
+            <td class='text-right' >
+                <div v-if="isEditing===false">
+                                  <button @click='showEditingForm(todo.title)' class="btn btn-primary mr-3">
                   Edit
               </button>
               <button @click='deleteTodo(todo._id)' class="btn btn-secondary">
                   Delete
               </button>
+
+                </div>
+
+                <div v-if="isEditing===true">
+                    <button class="btn btn-primary" @click="updateTodo(todo._id)"> Update</button>
+                </div>
+
             </td>
+
             
           </tr>
           
@@ -42,7 +59,8 @@ export default {
     data(){
         return{
             todos:[],
-            taskname:''
+            taskname:'',
+            isEditing:false
         }
     },
     mounted(){
@@ -61,6 +79,10 @@ export default {
         createTodo(){
             axios.post('http://localhost:4000/todos/create',{title:this.taskname})
                 .then(()=>{
+                    if(this.taskname==''){
+                        alert('You cannot leave the todo empty.');
+                        this.getTodos();
+                    }
                     this.taskname ='';
                     this.getTodos();
                 })
@@ -74,6 +96,16 @@ export default {
                 this.getTodos();
                 this.taskname='';
             })
+        },
+        showEditingForm(){
+            this.isEditing=true;
+        },
+        updateTodo(id){
+            axios.put(`http://localhost:4000/todos/${id}`)
+                .then(()=>{
+                    this.getTodos();
+                    this.isEditing=false;
+                });
         }
     }
 }
