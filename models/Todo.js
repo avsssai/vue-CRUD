@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Todo = mongoose.Schema({
-    name:{type:String}
+    title:{type:String}
 },{
     timestamps:true
 })

@@ -4,14 +4,18 @@ const Todo = require('../models/Todo');
 const router = express.Router();
 
 router.route('/create').post((req,res)=>{
+
     const todo = new Todo(req.body);
-    todo.save()
+    if(req.body.title !== ''){
+        todo.save()
         .then(task=>{
             res.status(200).json({'msg':'Todo saved successfully!'});
         })
         .catch(err=>{
             res.status(400).send('Error in saving Todo.');
         })
+
+    }
 
 
 })
@@ -26,12 +30,12 @@ router.route('/').get((req,res)=>{
     })
 })
 //update a todo.
-router.route('/todos/:id').put((req,res)=>{
-    req.findById(req.params.id,(err,todo)=>{
+router.route('/:id').put((req,res)=>{
+    Todo.findById(req.params.id,(err,todo)=>{
         if(!todo){
             res.send('Error fetching the todo.');
         }else{
-            todo.name = req.body.name;
+            todo.title = req.body.title;
             todo.save()
             .then(todo=>{
                 res.json({'msg':'Todo updated successfully.'});
@@ -45,8 +49,8 @@ router.route('/todos/:id').put((req,res)=>{
     })
 })
 //find a todo by id.
-router.route('/todos/:id').get((req,res)=>{
-    req.findById(req.params.id,(err,todo)=>{
+router.route('/:id').get((req,res)=>{
+    Todo.findById(req.params.id,(err,todo)=>{
         if(!todo){
             res.send('Could not fetch the todo by id.');
         }else{
@@ -57,12 +61,12 @@ router.route('/todos/:id').get((req,res)=>{
 
 //delete todo
 
-router.route('/todos/:id').delete((req,res)=>{
-    router.findById(req.params.id,(err,todo)=>{
+router.route('/:id').delete((req,res)=>{
+    Todo.findById(req.params.id,(err,todo)=>{
         if(!todo){
             res.send('Todo not found.');
         }else{
-            res.findByIdAndRemove({_id:req.id})
+            Todo.findByIdAndRemove({_id:req.params.id})
                 .then(todo=>{
                     res.json('Todo deleted.');
                 })

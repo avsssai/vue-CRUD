@@ -20,20 +20,20 @@
                 <div
                   v-show="isEditing===false"
                   @dblclick="showEditingForm()"
-                  v-on:blur="isEditing=false"
+                  v-on:blur="isEditing===false"
                 >{{todo.title}}</div>
                 <div v-show="isEditing===true">
-                  <input type="text" v-bind:id="todo.id" v-model="todo.title">
+                  <input type="text" v-bind:id="todo.id" v-model="todo.title" >
                 </div>
               </td>
               <td class="text-right">
                 <div v-if="isEditing===false">
-                  <button @click="showEditingForm(todo.title)" class="btn btn-primary mr-3">Edit</button>
+                  <button @click="showEditingForm(todo)" class="btn btn-primary mr-3">Edit</button>
                   <button @click="deleteTodo(todo._id)" class="btn btn-secondary">Delete</button>
                 </div>
 
                 <div v-if="isEditing===true">
-                  <button class="btn btn-primary" @click="updateTodo(todo)">Update</button>
+                  <button class="btn btn-primary" @click="updateTodo(todo)" @keydown.enter="updateTodo(todo)">Update</button>
                 </div>
               </td>
             </tr>
